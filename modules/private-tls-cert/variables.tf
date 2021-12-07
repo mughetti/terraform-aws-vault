@@ -3,6 +3,11 @@
 # You must provide a value for each of these parameters.
 # ---------------------------------------------------------------------------------------------------------------------
 
+variable "ca_private_key_file_path" {
+  description = "Write the PEM-encoded CA certificate public key to this path (e.g. /etc/tls/ca.key.pem)."
+  type        = string
+}
+
 variable "ca_public_key_file_path" {
   description = "Write the PEM-encoded CA certificate public key to this path (e.g. /etc/tls/ca.crt.pem)."
   type        = string
