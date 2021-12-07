@@ -1,0 +1,1 @@
+ packer build -debug -only=amazon-ebs.ubuntu16-ami vault-consul.json.pkr.hcl
