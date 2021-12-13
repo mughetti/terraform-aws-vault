@@ -1,1 +1,2 @@
- packer build -debug -only=amazon-ebs.ubuntu16-ami vault-consul.json.pkr.hcl
+ # use variables.auto.pkvars.hcl to override default variable values 
+ packer build -debug -only=amazon-ebs.ubuntu16-ami -var-file="variables.auto.pkrvars.hcl"   vault-consul.json.pkr.hcl

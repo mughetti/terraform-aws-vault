@@ -1,0 +1,6 @@
+aws_region = "eu-west-1"
+ca_public_key_path = "./tls/ca.crt.pem"
+tls_private_key_path = "./tls/vault.key.pem"
+tls_public_key_path = "./tls/vault.crt.pem"
+vault_version = "1.8.5"
+consul_version = "1.10.4"
