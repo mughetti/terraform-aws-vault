@@ -33,6 +33,17 @@ data "aws_ami" "consul" {
 
 }
 
+
+data "template_file" "vault-config" {
+  template = file("./vault-config/vault_override.hcl")
+
+  vars = {
+    consul_ip = aws_instance.consul.private_ip
+  }
+
+}
+
+
 ##################################################################################
 # RESOURCES
 ##################################################################################
@@ -91,6 +102,13 @@ resource "aws_security_group" "vault-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+ingress {
+    from_port   = 8200
+    to_port     = 8200
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   # outbound internet access
   egress {
     from_port   = 0
@@ -144,6 +162,32 @@ resource "aws_instance" "vault" {
 EOF
 
   tags = local.vault_common_tags
+
+  
+  # Establishes connection to be used by all generic remote provisioners
+  connection {
+      type = "ssh"
+      user = "ubuntu"
+      private_key = file("/home/mughetti/data/aws/EC2-Training.pem")
+      host = self.public_ip
+  }
+
+  # Copies the vault_override.hcl rendered template into /tmp/
+  provisioner "file" {
+
+  
+    content     = data.template_file.vault-config.rendered
+    destination = "/tmp/vault_override.hcl"
+  }
+  
+  # move the vault config file, set correct ownership and restart vault
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mv /tmp/vault_override.hcl /opt/vault/config",
+      "sudo chown vault:vault /opt/vault/config/vault_override.hcl",
+      "sudo systemctl restart vault"
+    ]
+  }
 
 }
 
