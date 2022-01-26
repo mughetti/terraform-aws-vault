@@ -137,6 +137,11 @@ build {
   sources = ["source.amazon-ebs.amazon-linux-2-ami", "source.amazon-ebs.ubuntu16-ami", "source.amazon-ebs.ubuntu18-ami"]
 
   provisioner "shell" {
+    inline = ["sudo yum install -y git", "if [[ '${var.install_auth_signing_script}' == 'true' ]]; then", "sudo yum install -y python2-pip", "LC_ALL=C && sudo pip install boto3", "fi"]
+    only   = ["amazon-ebs.amazon-linux-2-ami"]
+  }
+
+  provisioner "shell" {
     inline = ["mkdir -p /tmp/terraform-aws-vault/modules"]
   }
 
@@ -179,11 +184,6 @@ build {
     inline         = ["sudo apt-get install -y git", "if [[ '${var.install_auth_signing_script}' == 'true' ]]; then", "sudo apt-get install -y python-pip", "LC_ALL=C && sudo pip install boto3", "fi"]
     inline_shebang = "/bin/bash -e"
     only           = ["ubuntu16-ami", "ubuntu18-ami"]
-  }
-
-  provisioner "shell" {
-    inline = ["sudo yum install -y git", "if [[ '${var.install_auth_signing_script}' == 'true' ]]; then", "sudo yum install -y python2-pip", "LC_ALL=C && sudo pip install boto3", "fi"]
-    only   = ["amazon-linux-2-ami"]
   }
 
   provisioner "shell" {

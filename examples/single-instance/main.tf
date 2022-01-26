@@ -17,7 +17,7 @@ data "aws_ami" "vault" {
 
   filter {
     name   = "name"
-    values = ["vault-consul-ubuntu16-7c45a76a-a709-48f6-93f1-d4170ec1ca0e"]
+    values = ["vault-consul-amazon-linux-2-da86152f-3417-474f-a6cd-2e55999d9afd"]
   }
 
 }
@@ -28,7 +28,7 @@ data "aws_ami" "consul" {
 
   filter {
     name   = "name"
-    values = ["consul-ubuntu-a7a56da7-e22d-448d-8865-b032bffa1786"]
+    values = ["consul-amazon-linux-2-5c309333-a0f5-4760-b6e6-902ea3c0a58f"]
   }
 
 }
@@ -167,8 +167,8 @@ EOF
   # Establishes connection to be used by all generic remote provisioners
   connection {
       type = "ssh"
-      user = "ubuntu"
-      private_key = file("/home/mughetti/data/aws/EC2-Training.pem")
+      user = "ec2-user"
+      private_key = file("/home/marcou/key_pairs/EC2-Training.pem")
       host = self.public_ip
   }
 
